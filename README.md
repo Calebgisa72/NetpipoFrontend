@@ -12,13 +12,13 @@ This is a Rick and Morty Episode Viewer built as part of a front-end intern eval
 - [Usage](#usage)
 - [Testing](#testing)
 - [Deployment](#deployment)
-- [Quick Guide](#quick-guide)
 
 ## Technologies Used
 
 - **React** with **TypeScript**
 - **React Query** (TanStack Query) for data fetching
 - **React Router** for navigation
+- **Redux** for state management
 - **Axios** for API requests
 - **Tailwind CSS** for styling
 - **Vitest** and **React Testing Library** for testing
