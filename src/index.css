@@ -18,6 +18,7 @@ body {
 button {
   border-radius: 0.5rem;
   padding: 0.6rem 1.2rem;
+  outline: none;
   font-size: 1rem;
   font-weight: 500;
   font-family: inherit;
@@ -29,10 +30,6 @@ button:hover {
   border-color: #646cff;
 }
 
-button:focus,
-button:focus-visible {
-  outline: 0.25rem auto -webkit-focus-ring-color;
-}
 
 .custom-scrollbar::-webkit-scrollbar {
   width: 0.125rem;

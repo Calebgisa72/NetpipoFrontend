@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RiSearch2Line } from "react-icons/ri";
 import { setSearch } from "../Redux/Reducers/appReducer";
+import { ArrowLeft } from "lucide-react";
+import { RootState } from "../Redux/store";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [serchItem, setSerchItem] = useState<string>("");
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  const { tab } = useSelector((state: RootState) => state.app);
   const handleSearch = () => {
     if (!serchItem.trim()) return;
     dispatch(setSearch(serchItem));
@@ -14,10 +18,22 @@ const Navbar = () => {
   };
 
   return (
-    <div className="w-full h-16 px-6 flex items-center justify-end">
+    <div className="w-full h-16 px-6 flex items-center justify-between">
+      {tab && (
+        <div className="flex gap-3 items-center justify-center">
+          <ArrowLeft
+            className="text-muted w-[21px] cursor-pointer"
+            strokeWidth={1.7}
+            onClick={() => {
+              navigate(-1);
+            }}
+          />
+          <p>{tab}</p>
+        </div>
+      )}
       <div
         data-testid="search-bar"
-        className="w-[18.75rem] bg-muted text-foreground h-[2.25rem] flex px-[0.25rem] overflow-hidden rounded-[0.5rem]"
+        className="ml-auto w-[18.75rem] bg-muted text-foreground h-[2.25rem] flex px-[0.25rem] overflow-hidden rounded-[0.5rem]"
       >
         <input
           type="text"

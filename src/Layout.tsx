@@ -21,7 +21,7 @@ const Layout = () => {
       <div className="fixed w-[calc(100%-11.5rem)] left-[11.5rem] z-30">
         <Navbar />
       </div>
-      <main className="fixed top-16 bottom-10 left-[11.5rem] bg-blue-500 right-10 z-40 w-[calc(100%-11.5rem)] h-[calc(100%-2.25rem)] flex flex-col justify-center">
+      <main className="fixed top-16 bottom-10 left-[11.5rem] right-10 z-40 w-[calc(100%-11.5rem)] h-[calc(100%-2.25rem)] flex flex-col justify-center overflow-y-auto custom-scrollbar">
         <div className="w-full h-full flex flex-col">
           <Router />
         </div>
