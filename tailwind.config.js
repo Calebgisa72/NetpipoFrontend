@@ -60,9 +60,9 @@ export default {
       screens: {
         exs: "250px",
         xsm: "470px",
-        smd: "665px",
+        sz: "600px",
         xmd: "850px",
-        xlg: "1210px",
+        xlg: "1310px",
       },
     },
   },
