@@ -6,10 +6,10 @@ import s1Thumbnail from "../assets/Rick_and_Morty_Season_1.webp";
 
 const Browser = () => {
   return (
-    <div className="w-full h-full px-10 py-4 flex flex-col gap-5">
-      <div className="flex flex-col gap-4">
-        <p className="text-4xl">Rick and Morty TV series</p>
-        <p className="w-[37rem] text-[0.92rem]">
+    <div className="w-full h-full px-8 sz:px-10 py-4 flex flex-col gap-5 xlg:gap-10">
+      <div className="flex flex-col gap-4 xlg:gap-8">
+        <p className="text-2xl sz:text-4xl xlg:text-6xl">Rick and Morty TV series</p>
+        <p className="sz:w-[37rem] text-[0.84rem] sz:text-[0.92rem] xlg:text-2xl xlg:w-full">
           Rick and Morty is an animated sci-fi comedy series that follows the
           chaotic adventures of an eccentric, alcoholic scientist named Rick
           Sanchez and his good-hearted but easily influenced grandson, Morty
@@ -18,12 +18,12 @@ const Browser = () => {
           humor, absurdity, and philosophical themes.
         </p>
         <div className="flex flex-col gap-1">
-          <img src={rating} alt="" className="w-32" />
-          <p className="text-[0.93rem]">4/5 stars rating</p>
+          <img src={rating} alt="" className="w-32 xlg:w-44" />
+          <p className="text-[0.85rem] sz:text-[0.93rem] xlg:text-2xl">4/5 stars rating</p>
         </div>
-        <button className="flex gap-2 p-2 text-black items-center bg-primary w-36 justify-center">
+        <button className="flex gap-2 p-2 text-black items-center bg-primary w-32 sz:w-36 justify-center">
           <img src={playIcon} alt="" className="w-6" />
-          <p className="">Play Trailer</p>
+          <p className="text-[0.9rem] sz:text-[0.94rem]">Play Trailer</p>
         </button>
       </div>
 
