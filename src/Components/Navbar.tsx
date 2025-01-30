@@ -5,17 +5,26 @@ import { setSearch, setviewMenuBar } from "../Redux/Reducers/appReducer";
 import { ArrowLeft } from "lucide-react";
 import { RootState } from "../Redux/store";
 import { useNavigate } from "react-router-dom";
-import { IoMenu } from 'react-icons/io5';
+import { IoMenu } from "react-icons/io5";
 
 const Navbar = () => {
-  const [serchItem, setSerchItem] = useState<string>("");
+  const [serchItem, setSerchItem] = useState<string>(""); // Local state for search input
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { tab, viewMenuBar } = useSelector((state: RootState) => state.app);
+
+  // Handle search when the user hits "Enter"
   const handleSearch = () => {
-    if (!serchItem.trim()) return;
-    dispatch(setSearch(serchItem));
-    setSerchItem("");
+    if (serchItem.trim()) {
+      dispatch(setSearch(serchItem)); // Dispatch the search term to the store
+    }
+  };
+
+  // Update the local search term and dispatch the search on each keystroke
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSerchItem(value); // Update the local state for search input
+    dispatch(setSearch(value)); // Update the global search state in the Redux store
   };
 
   return (
@@ -46,15 +55,15 @@ const Navbar = () => {
         <input
           type="text"
           placeholder="Search"
-          value={serchItem}
-          onChange={(e) => setSerchItem(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+          value={serchItem} // Bind the local search state to the input value
+          onChange={handleInputChange} // Update state on each keystroke
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()} // Handle Enter key press
           className="w-[90%] bg-background-dark h-full outline-none py-2 pr-[0.5rem] pl-[0.375rem]"
           data-testid="search-input"
         />
         <div className="h-full flex items-center justify-center">
           <RiSearch2Line
-            onClick={handleSearch}
+            onClick={handleSearch} // Trigger search when clicked
             size={1.3125 * 16}
             className="text-primary hover:text-background cursor-pointer"
             data-testid="search-icon"
