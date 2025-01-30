@@ -1,13 +1,13 @@
 import React from "react";
 
-interface EpisodeProps {
-  thumbnail: string;
+export interface EpisodeProps {
+  thumbnail?: string;
   name: string;
-  airDate: string;
-  epCode: string;
+  air_date: string;
+  episode: string;
 }
 
-const EpisodeCard = ({ thumbnail, name, airDate, epCode }: EpisodeProps) => {
+const EpisodeCard = ({ thumbnail, name, air_date, episode }: EpisodeProps) => {
   return (
     <div className="w-[19rem] bg-card hover:bg-card-hover cursor-pointer rounded-[0.5rem] flex flex-col gap-2 mb-10">
       <div className="w-full h-[10rem] bg-red-600 rounded-t-[0.5rem] overflow-hidden">
@@ -15,11 +15,11 @@ const EpisodeCard = ({ thumbnail, name, airDate, epCode }: EpisodeProps) => {
       </div>
 
       <div className="flex flex-col gap-1 px-3 pb-2">
-        <div className="flex gap-1 items-center">
-          <p className="text-[0.91rem]">{epCode}: </p>
+        <div className="flex gap-2">
+          <p className="inline">{episode} : </p>
           <p>{name}</p>
         </div>
-        <p className="text-[0.9rem] text-description">{airDate}</p>
+        <p className="text-[0.9rem] text-description">{air_date}</p>
       </div>
     </div>
   );
