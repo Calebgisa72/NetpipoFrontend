@@ -29,8 +29,8 @@ export default {
         muted: "#ffffff",
         description: "#a7a7a7",
         card: {
-          DEFAULT: "#fffefe",
-          dark: "#1b1b1b",
+          DEFAULT: "#180d0d",
+          hover: "#1b2d18",
         },
       },
       fontFamily: {

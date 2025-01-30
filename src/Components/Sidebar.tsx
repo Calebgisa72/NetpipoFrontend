@@ -1,7 +1,7 @@
 import React from "react";
 import SideNavLink from "./SideNavLink";
 import { useDispatch } from "react-redux";
-import { setviewMenuBar } from "../Redux/Reducers/appReducer";
+import { Tabs, setTab, setviewMenuBar } from "../Redux/Reducers/appReducer";
 import {
   Bookmark,
   Flame,
@@ -18,10 +18,17 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const handleNavigate = (location: string) => {
     navigate(`${location}`);
+    const tabKey = location.replace("/", "").toUpperCase() as keyof typeof Tabs;
+
+    if (Tabs[tabKey]) {
+      dispatch(setTab(Tabs[tabKey]));
+    } else {
+      dispatch(setTab(Tabs.BROWSER));
+    }
     dispatch(setviewMenuBar(false));
   };
   return (
-    <div className="py-10 flex flex-col items-center w-[11.5rem] h-full bg-foreground shadow-xl shadow-[#A1FF00]/40">
+    <div className="py-10 flex flex-col items-center w-[11.5rem] h-full bg-foreground shadow-xl shadow-[#A1FF00]/40 overflow-y-auto custom-scrollbar">
       <h1 className="text-2xl italic mb-10 text-primary">NetPipo</h1>
       <div className="flex flex-col gap-4">
         <SideNavLink
@@ -34,11 +41,7 @@ const Sidebar = () => {
             strokeWidth={1.7}
           />
         </SideNavLink>
-        <SideNavLink
-          onClick={() => handleNavigate("/home")}
-          to="/browse"
-          name="Browse"
-        >
+        <SideNavLink onClick={() => handleNavigate("/")} to="/" name="Browse">
           <Globe
             className="text-muted w-[21px] cursor-pointer"
             strokeWidth={1.7}
