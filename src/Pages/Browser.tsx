@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import rating from "../assets/Frame 28.png";
 import playIcon from "../assets/play-circle-fill.svg";
 import EpisodeCard, { EpisodeProps } from "../Components/EpisodeCard";
-import s1Thumbnail from "../assets/Rick_and_Morty_Season_1.webp";
+import s1Thumbnail1 from "../assets/Rick_and_Morty_Season_1.webp";
+import s1Thumbnail2 from "../assets/Season2.webp";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
+import { useSelector } from "react-redux";
+import { RootState } from "../Redux/store";
 
 interface Season {
   season: string;
@@ -13,6 +16,7 @@ interface Season {
 }
 
 const Browser = () => {
+  const { search } = useSelector((state: RootState) => state.app);
   const query = useQuery({
     queryKey: ["episodes"],
     queryFn: async () => {
@@ -26,7 +30,7 @@ const Browser = () => {
   const [movieData, setMovieData] = useState<Season[]>([]);
   const [selectedSeason, setSelectedSeason] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const episodesPerPage = 6; // Customize this to your wished episodes
+  const episodesPerPage = 6;
 
   const groupEpisodesBySeason = (data: any): Season[] => {
     const seasons: Record<string, Season> = {};
@@ -62,16 +66,20 @@ const Browser = () => {
       (season) => season.season === selectedSeason
     );
     if (selectedSeasonData) {
-      const startIndex = (currentPage - 1) * episodesPerPage;
-      const endIndex = startIndex + episodesPerPage;
-      return selectedSeasonData.episodes.slice(startIndex, endIndex);
+      return selectedSeasonData.episodes;
     }
     return [];
   };
 
-  const totalEpisodes =
-    movieData.find((season) => season.season === selectedSeason)?.episodes
-      .length || 0;
+  const filteredEpisodes = !search.trim()
+    ? getCurrentEpisodes()
+    : movieData
+        .flatMap((season) => season.episodes)
+        .filter((episode) =>
+          episode.name.toLowerCase().includes(search.toLowerCase())
+        );
+
+  const totalEpisodes = filteredEpisodes.length;
   const totalPages = Math.ceil(totalEpisodes / episodesPerPage);
 
   return (
@@ -114,54 +122,112 @@ const Browser = () => {
       )}
 
       {query.data && (
-        <div className="w-full h-full flex flex-col gap-5 xlg:gap-10 mb-10">
-          <div className="flex gap-3 items-center">
-            {movieData.map((season) => (
-              <p
-                key={season.season}
-                className={`cursor-pointer ${
-                  selectedSeason === season.season ? "text-primary" : ""
+        <div className="w-full h-full flex flex-col gap-5 xlg:gap-10 mb-4">
+          {search.trim() ? (
+            <div className="flex flex-col gap-4">
+              <p className="text-lg">Search results for: {search}</p>
+              {totalEpisodes > 0 ? (
+                <div className="flex flex-wrap items-stretch gap-x-5 gap-y-7">
+                  {filteredEpisodes
+                    .slice(
+                      (currentPage - 1) * episodesPerPage,
+                      currentPage * episodesPerPage
+                    )
+                    .map((episode) => {
+                      const thumbnail = episode.episode.startsWith("S01")
+                        ? s1Thumbnail1
+                        : s1Thumbnail2;
+
+                      return (
+                        <EpisodeCard
+                          key={episode.name}
+                          thumbnail={thumbnail}
+                          air_date={episode.air_date}
+                          episode={episode.episode}
+                          name={episode.name}
+                        />
+                      );
+                    })}
+                </div>
+              ) : (
+                <p className="text text-lg">No episodes found</p>
+              )}
+            </div>
+          ) : (
+            <div className="w-full h-full flex flex-col gap-5 xlg:gap-10 mb-4">
+              <div className="flex gap-3 items-center">
+                {movieData.map((season) => (
+                  <p
+                    key={season.season}
+                    className={`cursor-pointer ${
+                      selectedSeason === season.season ? "text-primary" : ""
+                    }`}
+                    onClick={() => {
+                      setCurrentPage(1);
+                      setSelectedSeason(season.season);
+                    }}
+                  >
+                    {`Season ${season.season}`}
+                  </p>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap items-stretch gap-x-5 gap-y-7">
+                {filteredEpisodes
+                  .slice(
+                    (currentPage - 1) * episodesPerPage,
+                    currentPage * episodesPerPage
+                  )
+                  .map((episode) => {
+                    const thumbnail = episode.episode.startsWith("S01")
+                      ? s1Thumbnail1
+                      : s1Thumbnail2;
+
+                    return (
+                      <EpisodeCard
+                        key={episode.name}
+                        thumbnail={thumbnail}
+                        air_date={episode.air_date}
+                        episode={episode.episode}
+                        name={episode.name}
+                      />
+                    );
+                  })}
+              </div>
+            </div>
+          )}
+
+          {filteredEpisodes.length > 0 && (
+            <div className="flex justify-between items-center mb-5 min-h-32">
+              <button
+                className={`px-4 py-2 text-black ${
+                  currentPage === 1
+                    ? "cursor-not-allowed bg-gray-600"
+                    : "bg-card-hover text-foreground-dark hover:bg-card-hover"
                 }`}
-                onClick={() => setSelectedSeason(season.season)}
+                onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
+                disabled={currentPage === 1}
               >
-                {`Season ${season.season}`}
+                Previous
+              </button>
+              <p>
+                Page {currentPage} of {totalPages}
               </p>
-            ))}
-          </div>
-
-          <div className="flex flex-wrap items-center gap-x-5">
-            {getCurrentEpisodes().map((episode) => (
-              <EpisodeCard
-                key={episode.name}
-                thumbnail={s1Thumbnail}
-                air_date={episode.air_date}
-                episode={episode.episode}
-                name={episode.name}
-              />
-            ))}
-          </div>
-
-          <div className="flex justify-between items-center mb-5 min-h-32">
-            <button
-              className="px-4 py-2 bg-gray-300 text-black rounded"
-              onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <p>
-              Page {currentPage} of {totalPages}
-            </p>
-            <button
-              className="px-4 py-2 bg-gray-300 text-black rounded"
-              onClick={() =>
-                setCurrentPage(Math.min(currentPage + 1, totalPages))
-              }
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-          </div>
+              <button
+                className={`px-4 py-2 text-black ${
+                  currentPage === totalPages
+                    ? "cursor-not-allowed bg-gray-600"
+                    : "bg-card-hover text-foreground-dark hover:bg-card-hover"
+                }`}
+                onClick={() =>
+                  setCurrentPage(Math.min(currentPage + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

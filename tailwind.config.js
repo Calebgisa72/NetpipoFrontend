@@ -30,7 +30,7 @@ export default {
         description: "#a7a7a7",
         card: {
           DEFAULT: "#180d0d",
-          hover: "#1b2d18",
+          hover: "#14293d",
         },
       },
       fontFamily: {

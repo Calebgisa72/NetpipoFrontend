@@ -66,3 +66,10 @@ To run the tests, execute:
 ```bash
   npm run test
 ```
+
+## Deployment
+
+The application is deployed on Vercel. You can access the live version here:
+https://netpipo-frontend-seven.vercel.app/
+
+Feel free to explore the live demo of the Todo App to see its features in action!
